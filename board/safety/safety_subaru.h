@@ -12,7 +12,7 @@ const int SUBARU_STANDSTILL_THRSLD = 20;  // about 1kph
 const int SUBARU_L_DRIVER_TORQUE_ALLOWANCE = 75;
 const int SUBARU_L_DRIVER_TORQUE_FACTOR = 10;
 
-const CanMsg SUBARU_TX_MSGS[] = {{0x122, 0, 8}, {0x221, 0, 8}, {0x322, 0, 8}};
+const CanMsg SUBARU_TX_MSGS[] = {{0x122, 0, 8}, {0x221, 0, 8}, {0x322, 0, 8}, {0x139, 2, 8}};
 const int SUBARU_TX_MSGS_LEN = sizeof(SUBARU_TX_MSGS) / sizeof(SUBARU_TX_MSGS[0]);
 
 AddrCheckStruct subaru_rx_checks[] = {
@@ -24,7 +24,7 @@ AddrCheckStruct subaru_rx_checks[] = {
 };
 const int SUBARU_RX_CHECK_LEN = sizeof(subaru_rx_checks) / sizeof(subaru_rx_checks[0]);
 
-const CanMsg SUBARU_L_TX_MSGS[] = {{0x161, 0, 8}, {0x164, 0, 8}};
+const CanMsg SUBARU_L_TX_MSGS[] = {{0x161, 0, 8}, {0x164, 0, 8}, {0xD1, 2, 8}};
 const int SUBARU_L_TX_MSGS_LEN = sizeof(SUBARU_L_TX_MSGS) / sizeof(SUBARU_L_TX_MSGS[0]);
 
 // TODO: do checksum and counter checks after adding the signals to the outback dbc file
@@ -277,10 +277,15 @@ static int subaru_legacy_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
 static int subaru_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   int bus_fwd = -1;
+  int addr = GET_ADDR(to_fwd);
 
   if (!relay_malfunction) {
     if (bus_num == 0) {
-      bus_fwd = 2;  // Camera CAN
+      // 0x139 is Brake_Pedal for Global
+      int block_msg = (addr == 0x139);
+      if (!block_msg) {
+        bus_fwd = 2;  // Camera CAN
+      }
     }
     if (bus_num == 2) {
       // Global platform
@@ -303,7 +308,11 @@ static int subaru_legacy_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) 
 
   if (!relay_malfunction) {
     if (bus_num == 0) {
-      bus_fwd = 2;  // Camera CAN
+      // 0xD1 is Brake_Pedal for pre-global
+      int block_msg = (addr == 0xD1);
+      if (!block_msg) {
+        bus_fwd = 2;  // Camera CAN
+      }
     }
     if (bus_num == 2) {
       // Preglobal platform
