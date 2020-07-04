@@ -74,7 +74,7 @@ static int subaru_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     }
 
     if (addr == 0x139) {
-      brake_pressed = (GET_BYTES_48(to_push) & 0xFFF0) > 0;
+      brake_pressed = (GET_BYTES_48(to_push) & 0xFFF0) > 1;
     }
 
     if (addr == 0x40) {
