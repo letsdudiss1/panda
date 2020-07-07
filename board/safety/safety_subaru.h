@@ -292,7 +292,6 @@ static int subaru_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
       // 0x122 ES_LKAS
       // 0x221 ES_Distance
       // 0x322 ES_LKAS_State
-      int addr = GET_ADDR(to_fwd);
       int block_msg = ((addr == 0x122) || (addr == 0x221) || (addr == 0x322));
       if (!block_msg) {
         bus_fwd = 0;  // Main CAN
