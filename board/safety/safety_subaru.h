@@ -80,7 +80,7 @@ static int subaru_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
     // exit controls on rising edge of brake press (Brake_Pedal)
     if (addr == 0x139) {
-      // FIXME: get little endian value, currently 16 = 1
+      // TODO: get little endian value, currently 16 = 1
       brake_pressed = (GET_BYTES_48(to_push) & 0xFFF0) > 16;
       if (brake_pressed && (!brake_pressed_prev || vehicle_moving)) {
         controls_allowed = 0;
