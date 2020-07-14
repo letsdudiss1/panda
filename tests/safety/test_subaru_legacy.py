@@ -47,6 +47,8 @@ class TestSubaruLegacySafety(common.PandaSafetyTest):
     return self.packer.make_can_msg_panda("Wheel_Speeds", 0, values)
 
   def _brake_msg(self, brake):
+    if brake == 1:
+       brake = 3
     values = {"Brake_Pedal": brake}
     return self.packer.make_can_msg_panda("Brake_Pedal", 0, values)
 
