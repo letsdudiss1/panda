@@ -43,16 +43,17 @@ static int subaru_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
 
   bool valid = addr_safety_check(to_push, subaru_rx_checks, SUBARU_RX_CHECK_LEN,
                             subaru_get_checksum, subaru_compute_checksum, subaru_get_counter);
+  int addr = GET_ADDR(to_push);
 
   if (valid && (GET_BUS(to_push) == 0)) {
-    int addr = GET_ADDR(to_push);
     if (addr == 0x119) {
       int torque_driver_new;
       torque_driver_new = ((GET_BYTES_04(to_push) >> 16) & 0x7FF);
       torque_driver_new = -1 * to_signed(torque_driver_new, 11);
       update_sample(&torque_driver, torque_driver_new);
     }
-
+  }
+  if (valid && (GET_BUS(to_push) == 2)) {
     // enter controls on rising edge of ACC, exit controls on ACC off
     if (addr == 0x321) {
       int cruise_engaged = ((GET_BYTE(to_push, 4) >> 4) & 1);
@@ -64,7 +65,8 @@ static int subaru_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
       }
       cruise_engaged_prev = cruise_engaged;
     }
-
+  }
+  if (valid && (GET_BUS(to_push) == 0)) {
     // sample wheel speed, averaging opposite corners
     if (addr == 0x13a) {
       int subaru_speed = (GET_BYTES_04(to_push) >> 12) & 0x1FFF;  // FR
