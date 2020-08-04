@@ -70,7 +70,7 @@ class TestSubaruSafety(common.PandaSafetyTest):
   def _pcm_status_msg(self, enable):
     values = {"Cruise_Activated": enable, "Counter": self.cnt_cruise % 4}
     self.__class__.cnt_cruise += 1
-    return self.packer.make_can_msg_panda("CruiseControl", 0, values)
+    return self.packer.make_can_msg_panda("ES_DashStatus", 0, values)
 
   def _set_torque_driver(self, min_t, max_t):
     for _ in range(0, 5):
