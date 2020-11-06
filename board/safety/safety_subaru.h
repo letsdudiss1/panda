@@ -1,3 +1,4 @@
+#include <stdio.h>
 const int SUBARU_MAX_STEER = 2047; // 1s
 // real time torque limit to prevent controls spamming
 // the real time limit is 1500/sec

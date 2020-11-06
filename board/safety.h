@@ -16,7 +16,6 @@
 #include "safety/safety_nissan.h"
 #include "safety/safety_volkswagen.h"
 #include "safety/safety_elm327.h"
-#include <stdio.h>
 
 // from cereal.car.CarParams.SafetyModel
 #define SAFETY_SILENT 0U
