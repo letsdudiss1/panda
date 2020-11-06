@@ -113,6 +113,8 @@ static int subaru_hybrid_rx_hook(CAN_FIFOMailBox_TypeDef *to_push) {
     // enter controls on rising edge of ACC, exit controls on ACC off
     if (addr == 0x321) {
       int cruise_engaged = ((GET_BYTE(to_push, 4) >> 4) & 1);
+      printf("cruise_engaged %d\n, cruise_engaged);
+      printf("cruise_engaged_prev %d\n, cruise_engaged_prev);
       if (cruise_engaged && !cruise_engaged_prev) {
         controls_allowed = 1;
       }
