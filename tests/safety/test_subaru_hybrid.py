@@ -32,7 +32,7 @@ class TestSubaruSafety(common.PandaSafetyTest):
   FWD_BUS_LOOKUP = {0: 2, 2: 0}
 
   def setUp(self):
-    self.packer = CANPackerPanda("subaru_global_2020_generated")
+    self.packer = CANPackerPanda("subaru_global_2020_hybrid_generated")
     self.safety = libpandasafety_py.libpandasafety
     self.safety.set_safety_hooks(Panda.SAFETY_SUBARU_HYBRID, 0)
     self.safety.init_tests()
