@@ -68,7 +68,7 @@ class TestSubaruHybridSafety(common.PandaSafetyTest):
     return self.packer.make_can_msg_panda("Throttle", 0, values)
 
   def _pcm_status_msg(self, enable):
-    values = {"Cruise_Activated": enable, "Counter": self.cnt_cruise % 4}
+    values = {"Cruise_Activated": enable, "Counter": self.cnt_cruise % 10}
     self.__class__.cnt_cruise += 1
     return self.packer.make_can_msg_panda("ES_DashStatus", 2, values)
 
