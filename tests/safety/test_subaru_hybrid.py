@@ -32,9 +32,9 @@ class TestSubaruSafety(common.PandaSafetyTest):
   FWD_BUS_LOOKUP = {0: 2, 2: 0}
 
   def setUp(self):
-    self.packer = CANPackerPanda("subaru_global_2017_generated")
+    self.packer = CANPackerPanda("subaru_global_2020_generated")
     self.safety = libpandasafety_py.libpandasafety
-    self.safety.set_safety_hooks(Panda.SAFETY_SUBARU, 0)
+    self.safety.set_safety_hooks(Panda.SAFETY_SUBARU_HYBRID, 0)
     self.safety.init_tests()
 
   def _set_prev_torque(self, t):
@@ -70,7 +70,7 @@ class TestSubaruSafety(common.PandaSafetyTest):
   def _pcm_status_msg(self, enable):
     values = {"Cruise_Activated": enable, "Counter": self.cnt_cruise % 4}
     self.__class__.cnt_cruise += 1
-    return self.packer.make_can_msg_panda("CruiseControl", 0, values)
+    return self.packer.make_can_msg_panda("ES_DashStatus", 2, values)
 
   def _set_torque_driver(self, min_t, max_t):
     for _ in range(0, 5):
