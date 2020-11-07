@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdlib.h>
+//#include <stdio.h>
 
 typedef struct
 {
@@ -99,6 +100,7 @@ void set_gas_interceptor_detected(bool c){
 }
 
 bool get_controls_allowed(void){
+  //printf("controls_allowed: %d\n", controls_allowed);
   return controls_allowed;
 }
 
@@ -127,6 +129,7 @@ bool get_brake_pressed_prev(void){
 }
 
 bool get_cruise_engaged_prev(void){
+  //printf("cruise_engaged_prev: %d\n", cruise_engaged_prev);
   return cruise_engaged_prev;
 }
 
