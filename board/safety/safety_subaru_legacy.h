@@ -10,7 +10,7 @@ const int SUBARU_L_DRIVER_TORQUE_FACTOR = 10;
 const int SUBARU_L_STANDSTILL_THRSLD = 20;  // about 1kph
 const uint32_t SUBARU_L_BRAKE_THRSLD = 2; // filter sensor noise, max_brake is 400
 
-const CanMsg SUBARU_L_TX_MSGS[] = {{0x161, 0, 8}, {0x164, 0, 8}};
+const CanMsg SUBARU_L_TX_MSGS[] = {{0x161, 0, 8}, {0x164, 0, 8}, {0x140, 2, 8}};
 const int SUBARU_L_TX_MSGS_LEN = sizeof(SUBARU_L_TX_MSGS) / sizeof(SUBARU_L_TX_MSGS[0]);
 
 // TODO: do checksum and counter checks after adding the signals to the outback dbc file
@@ -142,16 +142,21 @@ static int subaru_legacy_tx_hook(CAN_FIFOMailBox_TypeDef *to_send) {
 
 static int subaru_legacy_fwd_hook(int bus_num, CAN_FIFOMailBox_TypeDef *to_fwd) {
   int bus_fwd = -1;
-
+  int addr = GET_ADDR(to_fwd);
+  
   if (!relay_malfunction) {
     if (bus_num == 0) {
-      bus_fwd = 2;  // Camera CAN
+      // PreGlobal platform
+      // 0x140 Throttle
+      int block_msg = ((addr == 0x140));
+      if (!block_msg) {
+        bus_fwd = 2;  // Camera CAN
+      }
     }
     if (bus_num == 2) {
       // Preglobal platform
       // 0x161 is ES_CruiseThrottle
       // 0x164 is ES_LKAS
-      int addr = GET_ADDR(to_fwd);
       int block_msg = ((addr == 0x161) || (addr == 0x164));
       if (!block_msg) {
         bus_fwd = 0;  // Main CAN
